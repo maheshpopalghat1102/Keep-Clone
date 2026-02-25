@@ -1,0 +1,88 @@
+client/
+│
+├── public/
+│   └── favicon.svg
+│
+├── src/
+│   │
+│   ├── assets/            → images, icons
+│   ├── components/
+│   │   ├── ui/
+│   │   │   ├── Button.jsx
+│   │   │   ├── Input.jsx
+│   │   │   └── Modal.jsx
+│   │   │
+│   │   ├── layout/
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── Sidebar.jsx
+│   │   │   └── Layout.jsx
+│   │   │
+│   │   └── notes/
+│   │       ├── NoteCard.jsx
+│   │       ├── NoteGrid.jsx
+│   │       ├── NoteEditor.jsx
+│   │       └── NoteForm.jsx
+│   │
+│   ├── pages/
+│   │   ├── Dashboard.jsx
+│   │   ├── Login.jsx
+│   │   ├── Register.jsx
+│   │   └── NotFound.jsx
+│   │
+│   ├── context/
+│   │   ├── AuthContext.jsx
+│   │   └── NoteContext.jsx
+│   │
+│   ├── hooks/
+│   │   └── useAuth.js
+│   │
+│   ├── services/
+│   │   ├── api.js
+│   │   ├── authService.js
+│   │   └── noteService.js
+│   │
+│   ├── utils/
+│   │   └── helpers.js
+│   │
+│   ├── App.jsx
+│   ├── main.jsx
+│   └── index.css
+│
+├── tailwind.config.js
+├── postcss.config.js
+├── package.json
+└── vite.config.js
+
+
+ONGO_URI=mongodb+srv://maheshppopalghat1102_db_user:kZdA47jf8Tq5dIhN@cluster0.l8fb6rh.mongodb.net/keep-clone?retryWrites=true&w=majority
+
+
+server/
+│
+├── config/
+│   └── db.js
+│
+├── controllers/
+│   ├── authController.js
+│   └── noteController.js
+│
+├── middleware/
+│   ├── authMiddleware.js
+│   └── errorMiddleware.js
+│
+├── models/
+│   ├── User.js
+│   └── Note.js
+│
+├── routes/
+│   ├── authRoutes.js
+│   └── noteRoutes.js
+│
+├── utils/
+│   └── generateToken.js
+│
+├── uploads/             → for images
+│
+├── server.js
+├── package.json
+└── .env
