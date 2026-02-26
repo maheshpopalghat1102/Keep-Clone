@@ -22,10 +22,24 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const frontendDistPath = path.resolve(__dirname, "../../frontend/dist");
-const clientOrigins = (process.env.CLIENT_URLS || "")
+const isProduction = process.env.NODE_ENV === "production";
+const configuredOrigins = (process.env.CLIENT_URLS || "")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
+if (process.env.FRONTEND_URL?.trim()) {
+  configuredOrigins.push(process.env.FRONTEND_URL.trim());
+}
+const allowedOrigins = [...new Set(configuredOrigins)];
+const defaultDevOrigins = ["http://localhost:5173", "http://127.0.0.1:5173"];
+const corsOrigins =
+  allowedOrigins.length > 0 ? allowedOrigins : isProduction ? [] : defaultDevOrigins;
+
+if (isProduction && corsOrigins.length === 0) {
+  throw new Error(
+    "CORS is not configured. Set FRONTEND_URL or CLIENT_URLS in backend environment."
+  );
+}
 
 /**
  * Middleware
@@ -33,14 +47,17 @@ const clientOrigins = (process.env.CLIENT_URLS || "")
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || clientOrigins.length === 0 || clientOrigins.includes(origin)) {
+      if (!origin || corsOrigins.includes(origin)) {
         return callback(null, true);
       }
       return callback(new Error("Not allowed by CORS"));
     },
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
+app.set("trust proxy", 1);
 app.use(express.json({ limit: "5mb" }));
 app.use(express.urlencoded({ extended: false, limit: "5mb" }));
 app.use(helmet());
@@ -73,7 +90,7 @@ app.all(/^\/socket\.io(\/.*)?$/, (req, res) => {
   res.status(204).end();
 });
 
-if (process.env.NODE_ENV === "production" && fs.existsSync(frontendDistPath)) {
+if (isProduction && fs.existsSync(frontendDistPath)) {
   app.use(express.static(frontendDistPath));
 
   app.get("*", (req, res, next) => {

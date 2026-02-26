@@ -58,6 +58,12 @@ CLIENT_URLS=http://localhost:5173
 VITE_API_URL=http://localhost:5000/api
 ```
 
+Example production frontend value:
+
+```env
+VITE_API_URL=https://keep-clone-k5h2.onrender.com/api
+```
+
 ## Local Setup
 
 ### Prerequisites
@@ -135,3 +141,23 @@ npm run build
 cd backend
 npm start
 ```
+
+## Deployment (Render)
+
+This repo now includes `render.yaml` for a two-service deploy:
+
+1. `keep-clone-api` (Node web service from `backend`)
+2. `keep-clone-frontend` (static site from `frontend`)
+
+Important:
+
+1. Set secret env vars in Render:
+   1. `MONGO_URI`
+   2. `JWT_SECRET`
+2. Set `FRONTEND_URL` and `CLIENT_URLS` to your real frontend domain(s).
+3. Frontend build uses `VITE_API_URL=https://keep-clone-k5h2.onrender.com/api` by default (from `frontend/.env.production` and `render.yaml`).
+
+You can also use `.env.example` files now:
+
+1. `backend/.env.example`
+2. `frontend/.env.example`
